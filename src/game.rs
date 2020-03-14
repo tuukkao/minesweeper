@@ -94,6 +94,11 @@ pub fn move_player(world: &World, player: &mut Player, direction: &Direction) {
 
 pub fn expose_mine(player: &mut Player, world: &mut World) -> bool {
     let square = world.get_square_mut(player.x, player.y);
+
+    if square.exposed {
+        return square.has_mine;
+    }
+
     square.exposed = true;
 
     if square.has_mine {
@@ -127,8 +132,8 @@ fn random_square_index(rng: &mut rand::rngs::ThreadRng, world: &World) -> (u8, u
 }
 
 fn is_corner(world: &World, x: u8, y: u8) -> bool {
-    ((x == 0 || x == world.width - 1)
-        && (y == 0 || y == world.height - 1))
+    x == 0 || x == world.width - 1
+        && y == 0 || y == world.height - 1
 }
 
 pub fn is_wall(world: &World, player: &Player, direction: &Direction) -> bool {
